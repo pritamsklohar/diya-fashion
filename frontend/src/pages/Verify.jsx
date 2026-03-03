@@ -11,7 +11,6 @@ const Verify = () => {
                 </p>
             </div>
         </div>
-        verify
     </div>
   )
 }
