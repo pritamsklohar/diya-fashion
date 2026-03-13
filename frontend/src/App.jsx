@@ -8,6 +8,19 @@ import Verify from './pages/Verify'
 import VerifyEmail from './pages/VerifyEmail'
 import Footer from './components/Footer'
 import Profile from './pages/Profile'
+import Products from './pages/Products'
+import Cart from './pages/Cart'
+import Dashboard from './pages/Dashboard'
+import AdminSales from './pages/admin/AdminSales'
+import AddProduct from './pages/admin/AddProduct'
+import AdminOrders from './pages/admin/AdminOrders'
+import AdminProduct from './pages/admin/AdminProduct'
+import AdminUsers from './pages/admin/AdminUsers'
+import ShowUserOrders from './pages/admin/ShowUserOrders'
+import UserInfo from './pages/admin/UserInfo'
+import ProtectedRoute from './components/ProtectedRoute'
+import SingleProduct from './pages/SingleProduct'
+import AddressForm from './pages/AddressForm'
 
 const router = createBrowserRouter([
   {
@@ -31,8 +44,58 @@ const router = createBrowserRouter([
     element: <><VerifyEmail/></>
   },
   {
-    path:'/profile',
-    element: <><Navbar/><Profile/></>
+    path:'/profile/:userId',
+    element: <ProtectedRoute><Navbar/><Profile/></ProtectedRoute>
+  },
+  {
+    path:'/products',
+    element: <><Navbar/><Products/></>
+  },
+  {
+    path:'/products/:id',
+    element: <><Navbar/><SingleProduct/></>
+  },
+  {
+    path:'/cart',
+    element: <ProtectedRoute><Navbar/><Cart/></ProtectedRoute>
+  },
+  {
+    path:'/address',
+    element: <ProtectedRoute><AddressForm/></ProtectedRoute>
+  },
+  {
+    path:'/dashboard',
+    element: <ProtectedRoute adminOnly={true}><Navbar/><Dashboard/></ProtectedRoute>,
+    children: [
+      {
+        path:"add-product",
+        element: <AddProduct/>
+      },
+      {
+        path:"orders",
+        element: <AdminOrders/>
+      },
+      {
+        path:"products",
+        element: <AdminProduct/>
+      },
+      {
+        path:"sales",
+        element: <AdminSales/>
+      },
+      {
+        path:"users",
+        element: <AdminUsers/>
+      },
+      {
+        path:"users/orders/:userId",
+        element: <ShowUserOrders/>
+      },
+      {
+        path:"users/:id",
+        element: <UserInfo/>
+      },
+    ]
   },
 ])
 
