@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { setProducts } from '@/redux/productSlice'
 import axios from 'axios'
+import API_BASE_URL from '@/utils/apiBase'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'sonner'
@@ -52,7 +53,7 @@ const AddProduct = () => {
 
     try {
       setLoading(true)
-      const res = await axios.post(`http://localhost:8000/api/v1/product/add`, formData, {
+      const res = await axios.post(`${API_BASE_URL}/api/v1/product/add`, formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
@@ -71,7 +72,7 @@ const AddProduct = () => {
   }
 
   return (
-    <div className='px-9 pt-10 pb-12'>
+    <div className='px-4 sm:px-6 lg:px-9 pt-8 sm:pt-10 pb-12'>
       <div className='max-w-6xl'>
         <Card className='border border-pink-100'>
           <CardHeader>

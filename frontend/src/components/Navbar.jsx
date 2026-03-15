@@ -1,13 +1,15 @@
-import { ShoppingBagIcon } from 'lucide-react'
-import React from 'react'
+import { Menu, ShoppingBagIcon, X } from 'lucide-react'
+import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button } from './ui/button'
 import axios from 'axios'
+import API_BASE_URL from '@/utils/apiBase'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from '@/redux/userSlice'
 import { toast } from 'sonner'
 
 const Navbar = () => {
+  const [mobileOpen, setMobileOpen] = useState(false)
   const { user } = useSelector(store => store.user)
   const { cart } = useSelector(store => store.product)
   const cartCount = Array.isArray(cart)
@@ -20,7 +22,7 @@ const Navbar = () => {
 
   const logoutHandler = async () => {
     try {
-      const res = await axios.post(`http://localhost:8000/api/v1/user/logout`, {}, {
+      const res = await axios.post(`${API_BASE_URL}/api/v1/user/logout`, {}, {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
@@ -59,7 +61,15 @@ const Navbar = () => {
             )}
           </nav>
 
-          <div className='flex items-center gap-3'>
+          <div className='flex items-center gap-2 sm:gap-3'>
+            <button
+              type='button'
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className='md:hidden rounded-lg p-2 hover:bg-pink-50'
+              aria-label='Toggle menu'
+            >
+              {mobileOpen ? <X className='h-5 w-5' /> : <Menu className='h-5 w-5' />}
+            </button>
             <Link to='/cart' className='relative rounded-full p-2 hover:bg-pink-50'>
               <ShoppingBagIcon className='h-5 w-5' />
               <span className='absolute -top-1 -right-1 min-w-5 h-5 rounded-full bg-pink-500 text-white text-xs grid place-items-center px-1'>
@@ -67,16 +77,33 @@ const Navbar = () => {
               </span>
             </Link>
             {user ? (
-              <Button onClick={logoutHandler} className='bg-slate-900 text-white hover:bg-slate-800'>
+              <Button size='sm' onClick={logoutHandler} className='bg-slate-900 text-white hover:bg-slate-800'>
                 Logout
               </Button>
             ) : (
-              <Button onClick={() => navigate('/login')} className='bg-pink-600 text-white hover:bg-pink-700'>
+              <Button size='sm' onClick={() => navigate('/login')} className='bg-pink-600 text-white hover:bg-pink-700'>
                 Login
               </Button>
             )}
           </div>
         </div>
+
+        {mobileOpen && (
+          <div className='md:hidden border-t border-pink-100 py-3'>
+            <nav className='flex flex-col gap-3 text-sm font-medium text-slate-700'>
+              <Link to='/' className='hover:text-pink-600' onClick={() => setMobileOpen(false)}>Home</Link>
+              <Link to='/products' className='hover:text-pink-600' onClick={() => setMobileOpen(false)}>Fabrics</Link>
+              {user && (
+                <Link to={`/profile/${user._id}`} className='hover:text-pink-600' onClick={() => setMobileOpen(false)}>
+                  My Account
+                </Link>
+              )}
+              {admin && (
+                <Link to='/dashboard/sales' className='hover:text-pink-600' onClick={() => setMobileOpen(false)}>Admin</Link>
+              )}
+            </nav>
+          </div>
+        )}
       </div>
     </header>
   )

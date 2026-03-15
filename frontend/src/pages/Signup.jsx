@@ -14,6 +14,7 @@ import { Loader2 } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import axios from 'axios'
+import API_BASE_URL from '@/utils/apiBase'
 
 const Signup = () => {
   const [loading, setLoading] = useState(false)
@@ -37,7 +38,7 @@ const Signup = () => {
     e.preventDefault()
     try {
       setLoading(true)
-      const res = await axios.post(`http://localhost:8000/api/v1/user/register`, formData, {
+      const res = await axios.post(`${API_BASE_URL}/api/v1/user/register`, formData, {
         headers: {
           "Content-Type": "application/json"
         }

@@ -8,20 +8,29 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Separator } from '@/components/ui/separator'
 import { Input } from '@/components/ui/input'
 import axios from 'axios'
+import API_BASE_URL from '@/utils/apiBase'
 import { setCart } from '@/redux/productSlice'
 import { toast } from 'sonner'
 
 const Cart = () => {
   const { cart } = useSelector((store) => store.product)
+  const safeItems = Array.isArray(cart?.items)
+    ? cart.items.filter((item) => item?.productId && item?.quantity)
+    : []
 
-  const subtotal = cart?.totalPrice || 0
+  const computedSubtotal = safeItems.reduce((sum, item) => {
+    const price = Number(item?.productId?.productPrice || 0)
+    return sum + price * item.quantity
+  }, 0)
+
+  const subtotal = Number.isFinite(cart?.totalPrice) ? cart.totalPrice : computedSubtotal
   const shipping = subtotal > 299 ? 0 : 10
   const tax = subtotal * 0.05
   const total = subtotal + shipping + tax
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const API = "http://localhost:8000/api/v1/cart"
+  const API = `${API_BASE_URL}/api/v1/cart`
   const accessToken = localStorage.getItem("accessToken")
 
   const handleUpdateQuantity = async (productId, type) => {
@@ -50,7 +59,12 @@ const Cart = () => {
       })
 
       if (res.data.success) {
-        dispatch(setCart(res.data.cart))
+        if (res.data.cart) {
+          dispatch(setCart(res.data.cart))
+        } else {
+          const nextItems = safeItems.filter((item) => item?.productId?._id !== productId)
+          dispatch(setCart({ ...cart, items: nextItems }))
+        }
         toast.success("Product removed from cart")
       }
     } catch (error) {
@@ -79,7 +93,7 @@ const Cart = () => {
 
   return (
     <div className='bg-[#fff5f7] min-h-screen pt-12 pb-12'>
-      {cart?.items?.length > 0 ? (
+      {safeItems.length > 0 ? (
         <div className='max-w-7xl mx-auto px-4'>
           <div className='flex items-center justify-between mb-6 flex-wrap gap-3'>
             <div>
@@ -93,7 +107,7 @@ const Cart = () => {
 
           <div className='grid gap-6 lg:grid-cols-[1.2fr_0.8fr]'>
             <div className='space-y-4'>
-              {cart?.items?.map((product, index) => (
+              {safeItems.map((product, index) => (
                 <Card key={index} className='border border-pink-100'>
                   <CardContent className='p-4 flex flex-col gap-4 md:flex-row md:items-center'>
                     <div className='flex items-center gap-4 flex-1'>
@@ -153,7 +167,7 @@ const Cart = () => {
                 </CardHeader>
                 <CardContent className='space-y-4'>
                   <div className='flex justify-between text-sm'>
-                    <span>Subtotal ({cart?.items?.length} items)</span>
+                    <span>Subtotal ({safeItems.length} items)</span>
                     <span>INR {subtotal.toLocaleString('en-IN')}</span>
                   </div>
                   <div className='flex justify-between text-sm'>

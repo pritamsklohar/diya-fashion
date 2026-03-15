@@ -14,6 +14,7 @@ import { Loader2 } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import axios from 'axios'
+import API_BASE_URL from '@/utils/apiBase'
 import { useDispatch } from 'react-redux'
 import { setUser } from '@/redux/userSlice'
 
@@ -38,7 +39,7 @@ const Login = () => {
     e.preventDefault()
     try {
       setLoading(true)
-      const res = await axios.post(`http://localhost:8000/api/v1/user/login`, formData, {
+      const res = await axios.post(`${API_BASE_URL}/api/v1/user/login`, formData, {
         headers: {
           "Content-Type": "application/json"
         }

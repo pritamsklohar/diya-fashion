@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
+import API_BASE_URL from '@/utils/apiBase'
 
 const VerifyEmail = () => {
   const { token } = useParams()
@@ -9,7 +10,7 @@ const VerifyEmail = () => {
 
   const verifyEmail = async () => {
     try {
-      const res = await axios.post(`http://localhost:8000/api/v1/user/verify`, {}, {
+      const res = await axios.post(`${API_BASE_URL}/api/v1/user/verify`, {}, {
         headers: {
           Authorization: `Bearer ${token}`
         }

@@ -21,6 +21,7 @@ import userLogo from "../assets/user.png"
 import { toast } from 'sonner'
 import { setUser } from '@/redux/userSlice'
 import axios from 'axios'
+import API_BASE_URL from '@/utils/apiBase'
 import MyOrder from './MyOrder'
 
 const Profile = () => {
@@ -71,7 +72,7 @@ const Profile = () => {
         formData.append("file", file)
       }
 
-      const res = await axios.put(`http://localhost:8000/api/v1/user/update/${userId}`, formData, {
+      const res = await axios.put(`${API_BASE_URL}/api/v1/user/update/${userId}`, formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "multipart/form-data"

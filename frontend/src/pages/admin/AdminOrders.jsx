@@ -1,4 +1,5 @@
 import axios from 'axios'
+import API_BASE_URL from '@/utils/apiBase'
 import React, { useEffect, useState } from 'react'
 
 const AdminOrders = () => {
@@ -9,7 +10,7 @@ const AdminOrders = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const { data } = await axios.get("http://localhost:8000/api/v1/orders/all", {
+        const { data } = await axios.get(`${API_BASE_URL}/api/v1/orders/all`, {
           headers: { Authorization: `Bearer ${accessToken}` },
         })
         if (data.success) setOrders(data.orders)
@@ -27,7 +28,7 @@ const AdminOrders = () => {
   }
 
   return (
-    <div className="py-10 mx-auto px-8 pl-10">
+    <div className="py-8 sm:py-10 mx-auto px-4 sm:px-6 lg:px-8 lg:pl-10">
       <h1 className="text-2xl font-semibold text-gray-900 mb-6">All Orders</h1>
 
       {orders.length === 0 ? (

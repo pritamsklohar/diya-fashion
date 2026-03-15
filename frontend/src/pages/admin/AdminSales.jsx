@@ -1,4 +1,5 @@
 import axios from 'axios';
+import API_BASE_URL from '@/utils/apiBase'
 import React, { useEffect, useState } from 'react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 // Replace these imports with your actual UI component paths
@@ -16,7 +17,7 @@ const AdminSales = () => {
     const fetchStats = async () => {
         try {
             const accessToken = localStorage.getItem("accessToken");
-            const res = await axios.get(`${import.meta.env.VITE_URL}/api/v1/orders/sales`, {
+            const res = await axios.get(`${API_BASE_URL}/api/v1/orders/sales`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }

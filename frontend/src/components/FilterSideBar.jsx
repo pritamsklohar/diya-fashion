@@ -1,6 +1,14 @@
 import React from 'react'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 const FilterSidebar = ({ allProducts, priceRange, search, setSearch, category, setCategory, setPriceRange }) => {
   const Categories = allProducts.map(p => p.category)
@@ -40,21 +48,20 @@ const FilterSidebar = ({ allProducts, priceRange, search, setSearch, category, s
           />
         </div>
 
-        <div>
+        <div className='space-y-2'>
           <h3 className='text-sm font-semibold text-slate-700'>Category</h3>
-          <div className='mt-3 space-y-2'>
-            {UniqueCategory.map((item, index) => (
-              <label key={index} className='flex items-center gap-2 text-sm text-slate-600'>
-                <input
-                  type='radio'
-                  checked={category === item}
-                  onChange={() => handleCategoryClick(item)}
-                  className='accent-pink-600'
-                />
-                {item}
-              </label>
-            ))}
-          </div>
+          <Select value={category} onValueChange={(val) => handleCategoryClick(val)}>
+            <SelectTrigger className='w-full bg-white rounded-lg'>
+              <SelectValue placeholder='All' />
+            </SelectTrigger>
+            <SelectContent position='popper' side='bottom' align='start' sideOffset={6}>
+              <SelectGroup>
+                {UniqueCategory.map((item, index) => (
+                  <SelectItem key={index} value={item}>{item}</SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
 
         <div>

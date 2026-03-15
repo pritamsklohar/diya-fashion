@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import axios from 'axios'
+import API_BASE_URL from '@/utils/apiBase'
 import { ArrowLeft } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
@@ -12,7 +13,7 @@ const ShowUserOrders = () => {
   const getUserOrders = async () => {
     try {
       const accessToken = localStorage.getItem("accessToken")
-      const res = await axios.get(`${import.meta.env.VITE_URL}/api/v1/orders/user-order/${params.userId}`, {
+      const res = await axios.get(`${API_BASE_URL}/api/v1/orders/user-order/${params.userId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
@@ -34,7 +35,7 @@ const ShowUserOrders = () => {
   }, [params.userId])
 
   return (
-    <div className='space-y-4 pt-10 px-8'>
+    <div className='space-y-4 pt-8 sm:pt-10 px-4 sm:px-6 lg:px-8'>
       <div className='flex items-center gap-3'>
         <Button onClick={() => navigate(-1)} variant='outline' className='rounded-lg'>
           <ArrowLeft />

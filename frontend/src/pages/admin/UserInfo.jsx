@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
+import API_BASE_URL from '@/utils/apiBase'
 import { toast } from 'sonner'
 import { setUser } from '@/redux/userSlice'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
@@ -63,7 +64,7 @@ const UserInfo = () => {
         formData.append("file", file)
       }
 
-      const res = await axios.put(`http://localhost:8000/api/v1/user/update/${userId}`, formData, {
+      const res = await axios.put(`${API_BASE_URL}/api/v1/user/update/${userId}`, formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           "Content-Type": "multipart/form-data"
@@ -83,7 +84,7 @@ const UserInfo = () => {
 
   const getUserDetails = async () => {
     try {
-      const res = await axios.get(`http://localhost:8000/api/v1/user/get-user/${userId}`)
+      const res = await axios.get(`${API_BASE_URL}/api/v1/user/get-user/${userId}`)
       if (res.data.success) {
         setUpdateUser({ ...emptyUser, ...res.data.user })
       }
@@ -97,7 +98,7 @@ const UserInfo = () => {
   }, [])
 
   return (
-    <div className='px-9 pt-10 pb-12'>
+    <div className='px-4 sm:px-6 lg:px-9 pt-8 sm:pt-10 pb-12'>
       <div className='max-w-5xl'>
         <div className='flex items-center gap-4 mb-6'>
           <Button onClick={() => navigate(-1)} variant='outline' className='rounded-lg'>

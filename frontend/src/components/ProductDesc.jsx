@@ -2,6 +2,7 @@ import React from 'react'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
 import axios from 'axios'
+import API_BASE_URL from '@/utils/apiBase'
 import { toast } from 'sonner'
 import { useDispatch } from 'react-redux'
 import { setCart } from '@/redux/productSlice'
@@ -12,7 +13,7 @@ const ProductDesc = ({ product }) => {
 
   const addToCart = async (productId) => {
     try {
-      const res = await axios.post('http://localhost:8000/api/v1/cart/add', { productId }, {
+      const res = await axios.post(`${API_BASE_URL}/api/v1/cart/add`, { productId }, {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }

@@ -1,5 +1,6 @@
 import { Input } from '@/components/ui/input'
 import axios from 'axios'
+import API_BASE_URL from '@/utils/apiBase'
 import { Edit, Eye, Search } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import UserLogo from "../../assets/user.png"
@@ -14,7 +15,7 @@ const AdminUsers = () => {
   const getAllUsers = async () => {
     const accessToken = localStorage.getItem("accessToken")
     try {
-      const res = await axios.get('http://localhost:8000/api/v1/user/all-user', {
+      const res = await axios.get(`${API_BASE_URL}/api/v1/user/all-user`, {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
@@ -37,14 +38,14 @@ const AdminUsers = () => {
   }, [])
 
   return (
-    <div className='px-9 pt-10 pb-12'>
+    <div className='px-4 sm:px-6 lg:px-9 pt-8 sm:pt-10 pb-12'>
       <div className='flex flex-wrap items-center justify-between gap-4 mb-6'>
         <div>
           <h1 className='text-lg font-semibold text-slate-900'>User Management</h1>
           <p className='text-sm text-slate-500'>View and manage registered customers.</p>
         </div>
 
-        <div className='relative w-[240px]'>
+        <div className='relative w-full sm:w-[240px]'>
           <Search className='absolute left-3 top-2.5 text-slate-400 w-4' />
           <Input value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className='pl-9 rounded-lg' placeholder='Search users...' />
         </div>

@@ -45,9 +45,11 @@ export const addToCart = async (req, res) => {
                 totalPrice: product.productPrice
             });
         } else {
+            // cleanup any orphaned items (product deleted)
+            cart.items = cart.items.filter(item => item.productId);
             // if cart exists, check if product is already in the cart
             const itemIndex = cart.items.findIndex(
-                (item) => item.productId.toString() === productId
+                (item) => item.productId && item.productId.toString() === productId
             );
 
             if (itemIndex > -1) {
@@ -93,7 +95,8 @@ export const updateQuantity = async (req, res) => {
         let cart = await Cart.findOne({ userId });
         if (!cart) return res.status(404).json({ success: false, message: "Cart not found" });
 
-        const item = cart.items.find(item => item.productId.toString() === productId);
+        cart.items = cart.items.filter(item => item.productId);
+        const item = cart.items.find(item => item.productId && item.productId.toString() === productId);
         if (!item) return res.status(404).json({ success: false, message: "Item not found" });
 
         if (type === "increase") {
@@ -130,7 +133,7 @@ export const removeFromCart = async (req, res) => {
         }
 
         // Filter out the item to be removed
-        cart.items = cart.items.filter(item => item.productId.toString() !== productId);
+        cart.items = cart.items.filter(item => item.productId && item.productId.toString() !== productId);
 
         // Recalculate the total price after removal
         cart.totalPrice = cart.items.reduce((acc, item) => acc + item.price * item.quantity, 0);

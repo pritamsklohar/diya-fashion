@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import axios from 'axios'
+import API_BASE_URL from '@/utils/apiBase'
 import { ArrowLeft } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -11,7 +12,7 @@ const MyOrder = () => {
   const getUserOrders = async () => {
     try {
       const accessToken = localStorage.getItem("accessToken")
-      const res = await axios.get(`${import.meta.env.VITE_URL}/api/v1/orders/myorder`, {
+      const res = await axios.get(`${API_BASE_URL}/api/v1/orders/myorder`, {
         headers: { Authorization: `Bearer ${accessToken}` }
       })
 

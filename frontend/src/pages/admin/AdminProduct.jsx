@@ -27,6 +27,7 @@ import ImageUpload from '@/components/ImageUpload'
 import { toast } from 'sonner'
 import { setProducts } from '@/redux/productSlice'
 import axios from 'axios'
+import API_BASE_URL from '@/utils/apiBase'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -94,7 +95,7 @@ const AdminProduct = () => {
       })
 
     try {
-      const res = await axios.put(`http://localhost:8000/api/v1/product/update/${editProduct._id}`, formData, {
+      const res = await axios.put(`${API_BASE_URL}/api/v1/product/update/${editProduct._id}`, formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
@@ -121,7 +122,7 @@ const AdminProduct = () => {
     try {
       const remainingProducts = products.filter((product) => product._id !== productId)
 
-      const res = await axios.delete(`http://localhost:8000/api/v1/product/delete/${productId}`, {
+      const res = await axios.delete(`${API_BASE_URL}/api/v1/product/delete/${productId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
@@ -137,19 +138,19 @@ const AdminProduct = () => {
   }
 
   return (
-    <div className='px-9 pt-10 pb-12'>
+    <div className='px-4 sm:px-6 lg:px-9 pt-8 sm:pt-10 pb-12'>
       <div className='flex flex-wrap gap-4 items-center justify-between mb-6'>
         <div>
           <h1 className='text-lg font-semibold text-slate-900'>Product Management</h1>
           <p className='text-sm text-slate-500'>Edit or remove fabric listings.</p>
         </div>
 
-        <div className='flex flex-wrap gap-3 items-center'>
+        <div className='flex flex-wrap gap-3 items-center w-full sm:w-auto'>
           <div className='relative bg-white rounded-lg border border-pink-100'>
             <Input
               type='text'
               placeholder='Search products...'
-              className='w-[240px] rounded-lg pl-9'
+              className='w-full sm:w-[240px] rounded-lg pl-9'
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -157,7 +158,7 @@ const AdminProduct = () => {
           </div>
 
           <Select onValueChange={(value) => setSortOrder(value)}>
-            <SelectTrigger className='w-[180px] bg-white rounded-lg'>
+            <SelectTrigger className='w-full sm:w-[180px] bg-white rounded-lg'>
               <SelectValue placeholder='Sort by price' />
             </SelectTrigger>
             <SelectContent>
@@ -185,7 +186,7 @@ const AdminProduct = () => {
                     <p className='text-sm text-slate-500'>{product.category}</p>
                   </div>
                 </div>
-                <div className='flex items-center gap-6'>
+                <div className='flex flex-wrap items-center gap-4'>
                   <p className='font-semibold text-slate-700'>INR {product.productPrice}</p>
 
                   <div className='flex gap-3'>

@@ -7,6 +7,7 @@ import { addAddress, deleteAddress, setCart, setSelectedAddress } from '@/redux/
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import axios from 'axios'
+import API_BASE_URL from '@/utils/apiBase'
 import { toast } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 
@@ -54,7 +55,7 @@ const AddressForm = () => {
         }
       }
 
-      const { data } = await axios.post(`${import.meta.env.VITE_URL}/api/v1/orders/create-order`, {
+      const { data } = await axios.post(`${API_BASE_URL}/api/v1/orders/create-order`, {
         products: cart?.items?.map(item => ({
           productId: item.productId?._id || item.product?._id,
           quantity: item.quantity,
@@ -79,7 +80,7 @@ const AddressForm = () => {
         description: "Order Payment",
         handler: async function (response) {
           try {
-            const verifyRes = await axios.post(`${import.meta.env.VITE_URL}/api/v1/orders/verify-payment`, response, {
+            const verifyRes = await axios.post(`${API_BASE_URL}/api/v1/orders/verify-payment`, response, {
               headers: { Authorization: `Bearer ${accessToken}` }
             })
             if (verifyRes.data.success) {
@@ -95,7 +96,7 @@ const AddressForm = () => {
         },
         modal: {
           ondismiss: async function () {
-            await axios.post(`${import.meta.env.VITE_URL}/api/v1/orders/verify-payment`, {
+            await axios.post(`${API_BASE_URL}/api/v1/orders/verify-payment`, {
               razorpay_order_id: data.order.id,
               paymentFailed: true
             }, {
@@ -115,7 +116,7 @@ const AddressForm = () => {
       const rzp = new window.Razorpay(options)
 
       rzp.on("payment.failed", async function (response) {
-        await axios.post(`${import.meta.env.VITE_URL}/api/v1/orders/verify-payment`, {
+        await axios.post(`${API_BASE_URL}/api/v1/orders/verify-payment`, {
           razorpay_order_id: data.order.id,
           paymentFailed: true
         }, {
