@@ -7,45 +7,55 @@ import { useDispatch } from 'react-redux'
 import { setCart } from '@/redux/productSlice'
 
 const ProductDesc = ({ product }) => {
-    const accessToken = localStorage.getItem("accessToken")
-    const dispatch = useDispatch()
+  const accessToken = localStorage.getItem("accessToken")
+  const dispatch = useDispatch()
 
-    const addToCart = async (productId) => {
-        try {
-            const res = await axios.post('http://localhost:8000/api/v1/cart/add', { productId }, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
-            })
-            if (res.data.success) {
-                toast.success('Product added to cart')
-                dispatch(setCart(res.data.cart))
-            }
-        } catch (error) {
-            console.log(error);
+  const addToCart = async (productId) => {
+    try {
+      const res = await axios.post('http://localhost:8000/api/v1/cart/add', { productId }, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`
         }
+      })
+      if (res.data.success) {
+        toast.success('Product added to cart')
+        dispatch(setCart(res.data.cart))
+      }
+    } catch (error) {
+      console.log(error)
     }
+  }
 
-    return (
-        <div className='flex flex-col gap-4'>
-            <h1 className='font-bold text-4xl text-gray-800'>{product?.productName}</h1>
-            <p className='text-gray-800'>{product?.category} | {product?.brand}</p>
-            <h2 className='text-pink-500 font-bold text-2xl'>₹{product?.productPrice}</h2>
-            <p className='line-clamp-12 text-muted-foreground'>{product?.productDesc}</p>
-            
-            <div className='flex gap-2 items-center w-[300px]'>
-                <p className='text-gray-800 font-semibold'>Quantity :</p>
-                <Input type='number' className='w-14' defaultValue={1} />
-            </div>
+  return (
+    <div className='space-y-4'>
+      <div className='space-y-1'>
+        <h1 className='text-2xl font-semibold text-slate-900'>{product?.productName}</h1>
+        <p className='text-sm text-slate-500'>{product?.category} | {product?.brand || 'Diya'}</p>
+      </div>
 
-            <Button 
-                onClick={() => addToCart(product?._id)} 
-                className='bg-pink-600 w-max'
-            >
-                Add to Cart
-            </Button>
+      <p className='text-xl font-semibold text-pink-600'>INR {product?.productPrice}</p>
+
+      <p className='text-sm text-slate-600 leading-relaxed'>{product?.productDesc}</p>
+
+      <div className='flex items-center gap-3'>
+        <div className='flex items-center gap-2 rounded-md border border-pink-100 bg-white px-3 py-2'>
+          <p className='text-sm font-medium text-slate-700'>Qty</p>
+          <Input type='number' className='w-16 h-9' defaultValue={1} />
         </div>
-    )
+        <Button
+          onClick={() => addToCart(product?._id)}
+          className='bg-pink-600 hover:bg-pink-700 text-white px-6'
+        >
+          Add to Cart
+        </Button>
+      </div>
+
+      <div className='grid gap-2 text-sm text-slate-500'>
+        <p>Free shipping above INR 299</p>
+        <p>Easy returns within 30 days</p>
+      </div>
+    </div>
+  )
 }
 
 export default ProductDesc

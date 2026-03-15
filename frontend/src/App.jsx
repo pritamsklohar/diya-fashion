@@ -11,6 +11,7 @@ import Profile from './pages/Profile'
 import Products from './pages/Products'
 import Cart from './pages/Cart'
 import Dashboard from './pages/Dashboard'
+import OrderSuccess from './pages/OrderSuccess'
 import AdminSales from './pages/admin/AdminSales'
 import AddProduct from './pages/admin/AddProduct'
 import AdminOrders from './pages/admin/AdminOrders'
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
     element: <ProtectedRoute><AddressForm/></ProtectedRoute>
   },
   {
+    path:'/order-success',
+    element: <ProtectedRoute><OrderSuccess/></ProtectedRoute>
+  },
+  {
     path:'/dashboard',
     element: <ProtectedRoute adminOnly={true}><Navbar/><Dashboard/></ProtectedRoute>,
     children: [
@@ -88,7 +93,7 @@ const router = createBrowserRouter([
         element: <AdminUsers/>
       },
       {
-        path:"users/orders/:userId",
+        path:"orders/:userId",
         element: <ShowUserOrders/>
       },
       {

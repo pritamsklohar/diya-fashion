@@ -4,10 +4,10 @@ import React from 'react'
 
 const Home = () => {
   return (
-    <div>
-      <Hero/>
-      <Features/> 
-    </div>
+    <main className='bg-[#fff5f7]'>
+      <Hero />
+      <Features />
+    </main>
   )
 }
 

@@ -2,15 +2,13 @@ import React from 'react'
 
 const Verify = () => {
   return (
-    <div className='relative w-full h-[760px] overflow-hidden'>
-        <div className='min-h-screen flex items-center justify-center bg-pink-100'>
-            <div className='bg-white p-8 rounded-2xl shadow-lg w-full max-w-md text-center'>
-                <h2 className='text-2xl font-semibold text-gray-500 mb-4'>✅ Check Your Email</h2>
-                <p className='text-gray-400 text-sm'>
-                    We've sent you an email to verify your account. Please check your inbox and click the verification link.
-                </p>
-            </div>
-        </div>
+    <div className='min-h-screen bg-[#fff5f7] flex items-center justify-center px-4'>
+      <div className='bg-white p-6 rounded-xl shadow-sm w-full max-w-md text-center border border-pink-100'>
+        <h2 className='text-lg font-semibold text-slate-800 mb-2'>Check Your Email</h2>
+        <p className='text-sm text-slate-600'>
+          We sent you a verification link. Open your email and click the link to verify.
+        </p>
+      </div>
     </div>
   )
 }

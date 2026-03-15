@@ -1,65 +1,103 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-// import Logo from '../assets/Logo.png'
+import React, { useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { FaFacebook, FaInstagram, FaPinterest, FaTwitterSquare } from 'react-icons/fa'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 
 const Footer = () => {
+  const navigate = useNavigate()
+  const [open, setOpen] = useState(false)
   return (
-    <footer className='bg-gray-900 text-gray-200 py-10'>
-      <div className='max-w-7xl mx-auto px-4 md:flex md:justify-between'>
-        
-        {/* info */}
-        <div className='mb-6 md:mb-0'>
-          <Link to='/'>
-            <img src='/Diya.png' alt="" className='w-32'/>
+    
+    <footer className='bg-white border-t border-pink-100'>
+      <div className='max-w-7xl mx-auto px-4 py-12 grid gap-8 md:grid-cols-4'>
+        <div className='space-y-3'>
+          <Link to='/' className='flex items-center gap-3'>
+            <img src='/Diya.png' alt='Diya Fashion' className='h-10 w-10 object-contain' />
+            <div>
+              <p className='text-lg font-semibold text-slate-900'>Diya Fashion</p>
+              <p className='text-xs text-slate-500'>Women&apos;s Fabrics</p>
+            </div>
           </Link>
-          <p className='mt-2 text-sm'>Powering Your World with the Best in Electronics.</p>
-          <p className='mt-2 text-sm'>123 Electronics St, Style City, NY 10001</p>
-          <p className='text-sm'>Email: support@Zaptro.com</p>
-          <p className='text-sm'>Phone: (123) 456-7890</p>
-        </div>
-
-        {/* customer service link */}
-        <div className='mb-6 md:mb-0'>
-          <h3 className='text-xl font-semibold'>Customer Service</h3>
-          <ul className='mt-2 text-sm space-y-2'>
-            <li>Contact Us</li>
-            <li>Shipping & Returns</li>
-            <li>FAQs</li>
-            <li>Order Tracking</li>
-            <li>Size Guide</li>
-          </ul>
-        </div>
-
-        {/* social media links */}
-        <div className='mb-6 md:mb-0'>
-          <h3 className='text-xl font-semibold'>Follow Us</h3>
-          <div className='flex space-x-4 mt-2'>
-            <FaFacebook />
-            <FaInstagram />
-            <FaTwitterSquare />
-            <FaPinterest />
+          <p className='text-sm text-slate-600'>Everyday fabrics for women, available in multiple colors, prints, and textures.</p>
+          <div className='text-sm text-slate-500 space-y-1'>
+            <p>Lohar vaas gali, near Govt. Hospital, Kalandri, Rajasthan 307802</p>
+            <p>Email: diyafashion@gmail.com</p>
+            <p>Phone: 6377235823</p>
           </div>
         </div>
 
-        {/* newsletter subscription */}
-        <div>
-          <h3 className='text-xl font-semibold'>Stay in the Loop</h3>
-          <p className='mt-2 text-sm'>Subscribe to get special offers, free giveaways, and more</p>
-          <form action="" className='mt-4 flex'>
-            <input 
-              type="email" 
-              placeholder='Your email address' 
-              className='w-full bg-white p-2 rounded-l-md text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500'
+        <div className='space-y-3'>
+          <h3 className='text-sm font-semibold text-slate-900'>Customer Care</h3>
+          <ul className='text-sm text-slate-600 space-y-2'>
+            <li className='cursor-pointer' onClick={() => setOpen(true)}>Contact Us</li>
+            <li className='cursor-pointer' onClick={() => navigate(`/cart`)}>Shipping and Returns</li>
+            <li>FAQs</li>
+            <li className='cursor-pointer' onClick={() => navigate(`/profile/:`)}>Order Tracking</li>
+          </ul>
+        </div>
+
+
+
+        <div className='space-y-3'>
+          <h3 className='text-sm font-semibold text-slate-900'>Popular Fabrics</h3>
+          <ul className='text-sm text-slate-600 space-y-2'>
+            <li className='cursor-pointer' onClick={() => navigate(`/products`)}>Cotton</li>
+            <li className='cursor-pointer' onClick={() => navigate(`/products`)}>Chiffon</li>
+            <li className='cursor-pointer' onClick={() => navigate(`/products`)}>Georgette</li>
+            <li className='cursor-pointer' onClick={() => navigate(`/products`)}>Silk Blend</li>
+          </ul>
+        </div>
+
+
+        <div className='space-y-3'>
+          <h3 className='text-sm font-semibold text-slate-900'>Stay Updated</h3>
+          <p className='text-sm text-slate-600'>Subscribe for new arrivals and offers.</p>
+          <form className='flex w-full rounded-lg border border-pink-200 overflow-hidden'>
+            <input
+              type='email'
+              placeholder='Your email'
+              className='w-full px-3 py-2 text-sm text-slate-700 focus:outline-none'
             />
-            <button type='submit' className='bg-pink-600 text-white px-4 rounded-r-md hover:bg-red-700'>Subscribe</button>
+            <button type='submit' className='bg-pink-600 px-4 text-sm font-semibold text-white'>Subscribe</button>
           </form>
+          <div className='flex items-center gap-3 text-xl text-pink-500'>
+            <a target='_blank' href="https://www.instagram.com/diyafashion_kalandri/">
+
+              <FaInstagram />
+            </a>
+          </div>
         </div>
       </div>
+      <div>
+          <Dialog open={open} onOpenChange={setOpen}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle className='font-bold text-center text-2xl'>Contact Us <br /><br /></DialogTitle>
+                <DialogDescription>
+                  <h4 className=' font-semibold text-xl'>Contact: <span className='text-gray-500 font-light'>6377235823</span></h4>
+                  <br />
+                  <h4 className='inline font-semibold text-xl'>Visit Us:
+                    <span className='text-gray-500 font-light'>  Lohar vaas gali, near Govt. Hospital, Kalandri, Rajasthan 307802</span>
+                  </h4> <br /> <br />
+                  <a className='font-semibold text-xl' target='_blank' href="https://www.instagram.com/diyafashion_kalandri/"><FaInstagram  className='inline'/> Diya Fashion Kalandri </a>
 
-      {/* bottom section */}
-      <div className='mt-8 border-t border-gray-700 pt-6 text-center text-sm'>
-        <p>&copy; {new Date().getFullYear()} <span className='text-pink-600'>Diya Fashion</span>. All rights reserved.</p>
+
+
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+        </div>
+
+      <div className='border-t border-pink-100 py-4 text-center text-xs text-slate-500'>
+        <p>&copy; {new Date().getFullYear()} Diya Fashion. All rights reserved.</p>
       </div>
     </footer>
   )

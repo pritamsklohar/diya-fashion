@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input'
 import axios from 'axios'
-import { Edit, Eye, ListOrdered, Search } from 'lucide-react'
+import { Edit, Eye, Search } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import UserLogo from "../../assets/user.png"
 import { Button } from '@/components/ui/button'
@@ -27,52 +27,54 @@ const AdminUsers = () => {
     }
   }
 
-  const filteredUsers = users.filter(user=>
+  const filteredUsers = users.filter(user =>
     `${user.firstName} ${user.lastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
     user.email.toLowerCase().includes(searchTerm.toLowerCase())
-
-    
   )
 
   useEffect(() => {
     getAllUsers()
   }, [])
 
-  console.log(users)
-
   return (
-    <div className='pl-[350px] py-20 pt-30 pr-20 mx-auto px-4'>
-      <h1 className='font-bold text-2xl'>User Management</h1>
-      <p>View and manage registered users</p>
+    <div className='px-9 pt-10 pb-12'>
+      <div className='flex flex-wrap items-center justify-between gap-4 mb-6'>
+        <div>
+          <h1 className='text-lg font-semibold text-slate-900'>User Management</h1>
+          <p className='text-sm text-slate-500'>View and manage registered customers.</p>
+        </div>
 
-      <div className='flex relative w-[300px] mt-6'>
-        <Search className='absolute left-2 top-1 text-gray-600 w-5' />
-        <Input value={searchTerm} onChange={(e)=> setSearchTerm(e.target.value)} className="pl-10" placeholder="Search Users..." />
+        <div className='relative w-[240px]'>
+          <Search className='absolute left-3 top-2.5 text-slate-400 w-4' />
+          <Input value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className='pl-9 rounded-lg' placeholder='Search users...' />
+        </div>
       </div>
 
-      <div className='grid grid-cols-3 gap-7 mt-7'>
-        {
-          filteredUsers.map((user, index) => {
-            return <div key={index} className='bg-pink-100 p-5 rounded-lg'>
-              <div className='flex items-center gap-2'>
-                <img
-                  src={user?.profilePic || UserLogo}
-                  alt=""
-                  className='rounded-full w-16 aspect-square object-cover border border-pink-600'
-                /> 
-                <div>
-                  <h1 className='font-semibold'>{user?.firstName} {user?.lastName}</h1>
-                  <h3>{user?.email}</h3>
-                </div>
-              </div>
-
-              <div className='flex gap-3 mt-3'>
-                <Button onClick={() => navigate(`/dashboard/users/${user._id}`)} variant='outline'><Edit/>Edit</Button>
-                <Button><Eye/>Show Order</Button>
+      <div className='grid gap-5 md:grid-cols-2 xl:grid-cols-3'>
+        {filteredUsers.map((user, index) => (
+          <div key={index} className='bg-white p-4 rounded-xl border border-pink-100'>
+            <div className='flex items-center gap-3'>
+              <img
+                src={user?.profilePic || UserLogo}
+                alt=''
+                className='rounded-full w-12 h-12 object-cover border border-pink-200'
+              />
+              <div>
+                <h1 className='font-medium text-slate-800'>{user?.firstName} {user?.lastName}</h1>
+                <h3 className='text-sm text-slate-500'>{user?.email}</h3>
               </div>
             </div>
-          })
-        }
+
+            <div className='flex gap-3 mt-4'>
+              <Button onClick={() => navigate(`/dashboard/users/${user._id}`)} variant='outline' className='rounded-lg'>
+                <Edit className='w-4 h-4 mr-1' /> Edit
+              </Button>
+              <Button onClick={() => navigate(`/dashboard/orders/${user._id}`)} className='rounded-lg bg-pink-600 hover:bg-pink-700 text-white'>
+                <Eye className='w-4 h-4 mr-1' /> Orders
+              </Button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   )

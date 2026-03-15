@@ -26,7 +26,7 @@ const AddProduct = () => {
   })
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value } = e.target
     setProductData((prev) => ({
       ...prev,
       [name]: value
@@ -71,31 +71,31 @@ const AddProduct = () => {
   }
 
   return (
-    <div className='pl-[350px] py-10 pr-20 mx-auto px-4 bg-gray-100'>
-      <Card className="w-full my-20">
-        <CardHeader>
-          <CardTitle>Add Product</CardTitle>
-          <CardDescription>Enter Product details below</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className='flex flex-col gap-2'>
+    <div className='px-9 pt-10 pb-12'>
+      <div className='max-w-6xl'>
+        <Card className='border border-pink-100'>
+          <CardHeader>
+            <CardTitle className='text-lg'>Add Product</CardTitle>
+            <CardDescription>Enter product details to publish a new listing.</CardDescription>
+          </CardHeader>
+          <CardContent className='space-y-4'>
             <div className='grid gap-2'>
               <Label>Product Name</Label>
               <Input
                 type='text'
-                name="productName"
+                name='productName'
                 value={productData.productName}
                 onChange={handleChange}
-                placeholder="Lehenga"
+                placeholder='Fabric name'
                 required
               />
             </div>
 
             <div className='grid gap-2'>
-              <Label>Price</Label>
+              <Label>Price (INR)</Label>
               <Input
                 type='number'
-                name="productPrice"
+                name='productPrice'
                 value={productData.productPrice}
                 onChange={handleChange}
                 required
@@ -106,46 +106,44 @@ const AddProduct = () => {
               <Label>Category</Label>
               <Input
                 type='text'
-                name="category"
+                name='category'
                 value={productData.category}
                 onChange={handleChange}
-                placeholder="cotton"
+                placeholder='Cotton, Silk, etc.'
                 required
               />
             </div>
 
             <div className='grid gap-2'>
-              <div className='flex items-center'>
-                <Label>Description</Label>
-              </div>
+              <Label>Description</Label>
               <Textarea
-                name="productDesc"
+                name='productDesc'
                 value={productData.productDesc}
                 onChange={handleChange}
-                placeholder="description"
+                placeholder='Describe the fabric'
               />
             </div>
 
             <ImageUpload productData={productData} setProductData={setProductData} />
-          </div>
-        </CardContent>
-        <CardFooter className="flex-col gap-2">
-          <Button
-            disabled={loading}
-            onClick={submitHandler}
-            className="w-full bg-pink-600 cursor-pointer"
-            type="submit"
-          >
-            {loading ? (
-              <span className='flex gap-1 items-center'>
-                <Loader2 className='animate-spin' /> Please wait
-              </span>
-            ) : (
-              'Add Product'
-            )}
-          </Button>
-        </CardFooter>
-      </Card>
+          </CardContent>
+          <CardFooter className='flex-col gap-2'>
+            <Button
+              disabled={loading}
+              onClick={submitHandler}
+              className='w-full bg-pink-600 hover:bg-pink-700 text-white rounded-lg'
+              type='submit'
+            >
+              {loading ? (
+                <span className='flex gap-2 items-center'>
+                  <Loader2 className='animate-spin' /> Please wait
+                </span>
+              ) : (
+                'Add Product'
+              )}
+            </Button>
+          </CardFooter>
+        </Card>
+      </div>
     </div>
   )
 }

@@ -1,35 +1,54 @@
-import { LayoutDashboard, PackagePlus, PackageSearch, Users } from 'lucide-react'; 
+import { LayoutDashboard, PackagePlus, PackageSearch, Users } from 'lucide-react';
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { FaRegEdit } from "react-icons/fa";
 
 const Sidebar = () => {
+    const linkBase = 'flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition';
     return (
-        <div className='hidden fixed md:block border-r bg-pink-50 border-pink-200 z-10 w-[300px] p-10 space-y-2 h-screen'>
-            <div className='text-center pt-20 px-3 space-y-2'>
-                
-                <NavLink to='/dashboard/sales' className={({isActive}) => `text-xl ${isActive ? "bg-pink-600 text-white" : "text-gray-400 bg-transparent"} flex items-center gap-2 font-bold cursor-pointer p-3 rounded-2xl w-full`}>
-                    <LayoutDashboard /> <span>Dashboard</span>
+        <aside className='hidden fixed md:block border-r bg-white border-pink-100 z-10 w-[280px] h-screen px-6 pt-10'>
+            <div className='mb-8'>
+                <div className='flex items-center gap-3'>
+                    <img src='/Diya.png' alt='Diya Fashion' className='h-9 w-9 object-contain' />
+                    <div>
+                        <p className='text-sm font-semibold text-slate-900'>Diya Fashion</p>
+                        <p className='text-xs text-slate-500'>Admin Panel</p>
+                    </div>
+                </div>
+            </div>
+
+            <nav className='space-y-2'>
+                <NavLink to='/dashboard/sales' className={({ isActive }) =>
+                    `${linkBase} ${isActive ? "bg-pink-600 text-white shadow-sm" : "text-slate-600 hover:bg-pink-50"}`
+                }>
+                    <LayoutDashboard className='h-5 w-5' /> <span>Dashboard</span>
                 </NavLink>
 
-                <NavLink to='/dashboard/add-product' className={({isActive}) => `text-xl ${isActive ? "bg-pink-600 text-white" : "text-gray-400 bg-transparent"} flex items-center gap-2 font-bold cursor-pointer p-3 rounded-2xl w-full`}>
-                    <PackagePlus /> <span>Add Product</span>
+                <NavLink to='/dashboard/add-product' className={({ isActive }) =>
+                    `${linkBase} ${isActive ? "bg-pink-600 text-white shadow-sm" : "text-slate-600 hover:bg-pink-50"}`
+                }>
+                    <PackagePlus className='h-5 w-5' /> <span>Add Product</span>
                 </NavLink>
 
-                <NavLink to='/dashboard/products' className={({isActive}) => `text-xl ${isActive ? "bg-pink-600 text-white" : "text-gray-400 bg-transparent"} flex items-center gap-2 font-bold cursor-pointer p-3 rounded-2xl w-full`}>
-                    <PackageSearch /> <span>Products</span>
+                <NavLink to='/dashboard/products' className={({ isActive }) =>
+                    `${linkBase} ${isActive ? "bg-pink-600 text-white shadow-sm" : "text-slate-600 hover:bg-pink-50"}`
+                }>
+                    <PackageSearch className='h-5 w-5' /> <span>Products</span>
                 </NavLink>
 
-                <NavLink to='/dashboard/users' className={({isActive}) => `text-xl ${isActive ? "bg-pink-600 text-white" : "text-gray-400 bg-transparent"} flex items-center gap-2 font-bold cursor-pointer p-3 rounded-2xl w-full`}>
-                    <Users /> <span>Users</span>
+                <NavLink to='/dashboard/users' className={({ isActive }) =>
+                    `${linkBase} ${isActive ? "bg-pink-600 text-white shadow-sm" : "text-slate-600 hover:bg-pink-50"}`
+                }>
+                    <Users className='h-5 w-5' /> <span>Users</span>
                 </NavLink>
 
-                <NavLink to='/dashboard/orders' className={({isActive}) => `text-xl ${isActive ? "bg-pink-600 text-white" : "text-gray-400 bg-transparent"} flex items-center gap-2 font-bold cursor-pointer p-3 rounded-2xl w-full`}>
+                <NavLink to='/dashboard/orders' className={({ isActive }) =>
+                    `${linkBase} ${isActive ? "bg-pink-600 text-white shadow-sm" : "text-slate-600 hover:bg-pink-50"}`
+                }>
                     <FaRegEdit /> <span>Orders</span>
                 </NavLink>
-
-            </div>
-        </div>
+            </nav>
+        </aside>
     );
 };
 

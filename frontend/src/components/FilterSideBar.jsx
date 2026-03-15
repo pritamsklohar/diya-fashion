@@ -1,75 +1,112 @@
 import React from 'react'
 import { Input } from './ui/input'
-import { Label } from './ui/label'
 import { Button } from './ui/button'
 
 const FilterSidebar = ({ allProducts, priceRange, search, setSearch, category, setCategory, setPriceRange }) => {
-    // Dynamically extract unique categories
-    const Categories = allProducts.map(p => p.category)
-    const UniqueCategory = ["All", ...new Set(Categories)]
+  const Categories = allProducts.map(p => p.category)
+  const UniqueCategory = ["All", ...new Set(Categories)]
 
-    const handleCategoryClick =(val)=>{
-        setCategory(val)
-    }
+  const handleCategoryClick = (val) => {
+    setCategory(val)
+  }
 
-    const handleMinChange = (e)=>{
-        const value = Number(e.target.value)
-        if(value <= priceRange[1]) setPriceRange([value, priceRange[1]])
-    }
+  const handleMinChange = (e) => {
+    const value = Number(e.target.value)
+    if (value <= priceRange[1]) setPriceRange([value, priceRange[1]])
+  }
 
-    const handleMaxChange = (e)=>{
-        const value = Number(e.target.value)
-        if(value >= priceRange[0]) setPriceRange([priceRange[0], value])
-    }
+  const handleMaxChange = (e) => {
+    const value = Number(e.target.value)
+    if (value >= priceRange[0]) setPriceRange([priceRange[0], value])
+  }
 
-    const resetFilters = ()=>{
-        setSearch("")
-        setCategory("All")
-        setPriceRange([0, 10000])
-    }
+  const resetFilters = () => {
+    setSearch("")
+    setCategory("All")
+    setPriceRange([0, 10000])
+  }
 
-
-
-
-    return (
-        <div className='bg-gray-100 mt-10 p-4 rounded-md h-max hidden md:block w-64'>
-            {/* Search */}
-            <Input type="text" value={search} onChange={(e)=>setSearch(e.target.value)} placeholder="Search..." className="bg-white p-2 rounded-md border-gray-400 border-2 w-full" />
-
-            {/* Category Section */}
-            <h1 className='mt-5 font-semibold text-xl'>Category</h1>
-            <div className='flex flex-col gap-2 mt-3'>
-                {
-                    UniqueCategory.map((item, index) => (
-                        <div key={index} className='flex items-center gap-2'>
-                            <input type="radio" checked={category === item} onChange={()=>handleCategoryClick(item)}/>
-                            <label htmlFor="">{item}</label>
-                        </div>
-                    ))
-                }
-            </div>
-
-            {/* Price Range Section */}
-            <h1 className='mt-5 font-semibold text-xl mb-3'>Price Range</h1>
-            <div className='flex flex-col gap-2'>
-                <label>
-                    Price Range: ₹{priceRange[0]} - ₹{priceRange[1]}
-                </label>
-                <div className='flex gap-2 items-center'>
-                    <input value={priceRange[0]} onChange={handleMinChange} type="number" min="0" max="5000" className='w-20 p-1 border border-gray-300 rounded' />
-                    <span>-</span>
-                    <input type="number" min="0" max="10000" value={priceRange[1]} onChange={handleMaxChange} className='w-20 p-1 border border-gray-300 rounded' />
-                </div>
-                <input type="range" value ={priceRange[0]} onChange={handleMinChange} min="0" max="5000" step="100" className='w-full' />
-                <input type="range" value ={priceRange[1]} onChange={handleMaxChange} min="0" max="10000" step="100" className='w-full' />
-            </div>
-
-            {/* Reset Button */}
-            <Button onClick={resetFilters} className="bg-pink-600 text-white mt-5 cursor-pointer w-full">
-                Reset Filters
-            </Button>
+  return (
+    <aside className='hidden md:block w-72'>
+      <div className='sticky top-24 space-y-5 rounded-xl border border-pink-100 bg-white p-5'>
+        <div className='space-y-2'>
+          <p className='text-xs font-semibold text-slate-700'>Search</p>
+          <Input
+            type='text'
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder='Search fabric...'
+            className='bg-white rounded-lg'
+          />
         </div>
-    )
+
+        <div>
+          <h3 className='text-sm font-semibold text-slate-700'>Category</h3>
+          <div className='mt-3 space-y-2'>
+            {UniqueCategory.map((item, index) => (
+              <label key={index} className='flex items-center gap-2 text-sm text-slate-600'>
+                <input
+                  type='radio'
+                  checked={category === item}
+                  onChange={() => handleCategoryClick(item)}
+                  className='accent-pink-600'
+                />
+                {item}
+              </label>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <h3 className='text-sm font-semibold text-slate-700'>Price Range (INR)</h3>
+          <p className='mt-2 text-sm text-slate-500'>INR {priceRange[0]} - INR {priceRange[1]}</p>
+          <div className='mt-3 flex gap-2 items-center'>
+            <input
+              value={priceRange[0]}
+              onChange={handleMinChange}
+              type='number'
+              min='0'
+              max='5000'
+              className='w-24 rounded-md border border-pink-100 px-2 py-1 text-sm'
+            />
+            <span className='text-slate-400'>-</span>
+            <input
+              type='number'
+              min='0'
+              max='10000'
+              value={priceRange[1]}
+              onChange={handleMaxChange}
+              className='w-24 rounded-md border border-pink-100 px-2 py-1 text-sm'
+            />
+          </div>
+          <div className='mt-3 space-y-2'>
+            <input
+              type='range'
+              value={priceRange[0]}
+              onChange={handleMinChange}
+              min='0'
+              max='5000'
+              step='100'
+              className='w-full accent-pink-500'
+            />
+            <input
+              type='range'
+              value={priceRange[1]}
+              onChange={handleMaxChange}
+              min='0'
+              max='10000'
+              step='100'
+              className='w-full accent-pink-500'
+            />
+          </div>
+        </div>
+
+        <Button onClick={resetFilters} className='w-full bg-slate-900 text-white hover:bg-slate-800'>
+          Reset Filters
+        </Button>
+      </div>
+    </aside>
+  )
 }
 
 export default FilterSidebar

@@ -1,16 +1,47 @@
-# React + Vite
+# Diya Fashion Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Vite + React storefront and admin dashboard for the Diya Fashion platform.
 
-Currently, two official plugins are available:
+**Tech Stack**
+- React 19
+- Vite 7
+- Tailwind CSS 4
+- Redux Toolkit + Redux Persist
+- React Router
+- Axios
+- Radix UI (via shadcn tooling)
+- Recharts (admin analytics)
+- Lucide + React Icons
+- Sonner (toast notifications)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+**Key Features**
+- Product listing and details
+- Cart management
+- User auth flows
+- Orders + Razorpay payment
+- Admin dashboard (users, orders, sales)
 
-## React Compiler
+**Important Files**
+- `frontend/src/main.jsx` - app entry
+- `frontend/src/App.jsx` - route map
+- `frontend/src/pages/` - screens (shop, auth, admin)
+- `frontend/src/components/` - shared UI
+- `frontend/src/redux/` - store, slices, persistence
+- `frontend/src/lib/` - utilities
+- `frontend/src/index.css` - Tailwind base + global styles
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+**Environment Variables**
+Create a `.env` file in `frontend/`:
+- `VITE_URL` (backend base URL, e.g. `http://localhost:8000`)
+- `VITE_RAZORPAY_KEY_ID`
 
-## Expanding the ESLint configuration
+**Scripts**
+- `npm install`
+- `npm run dev` (local dev server)
+- `npm run build`
+- `npm run preview`
+- `npm run lint`
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+**Notes**
+- The backend must be running for API calls and payment verification.
+- Razorpay uses `VITE_RAZORPAY_KEY_ID` on the client and server secrets stay in the backend.
