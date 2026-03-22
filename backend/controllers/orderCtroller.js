@@ -8,6 +8,13 @@ import crypto from 'crypto'
 export const createOrder = async (req, res) => {
     try {
         const { products, amount, tax, shipping, currency } = req.body
+        if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_SECRET) {
+            return res.status(500).json({
+                success: false,
+                message: "Razorpay keys are not configured on server"
+            })
+        }
+
         const options = {
             amount: Math.round(Number(amount) * 100),
             currency: currency || "INR",
@@ -32,7 +39,8 @@ export const createOrder = async (req, res) => {
         res.json({
             success: true,
             order: razorpayOrder,
-            dbOrder: newOrder
+            dbOrder: newOrder,
+            keyId: process.env.RAZORPAY_KEY_ID
         })
     } catch (error) {
         console.error("❌ Error in create order:", error)
