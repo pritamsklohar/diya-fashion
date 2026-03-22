@@ -11,17 +11,40 @@ import cors from 'cors'
 const app = express()
 
 const PORT = process.env.PORT || 3000
-const allowedOrigins = [
+const normalizeOrigin = (origin) => {
+    if (!origin) return null
+    return origin.trim().replace(/\/+$/, '')
+}
+
+const isVercelOrigin = (origin) => {
+    try {
+        return /\.vercel\.app$/i.test(new URL(origin).hostname)
+    } catch {
+        return false
+    }
+}
+
+const vercelUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null
+const allowedOrigins = new Set([
     'http://localhost:5173',
-    process.env.FRONTEND_URL,
-    ...(process.env.FRONTEND_ORIGINS ? process.env.FRONTEND_ORIGINS.split(',').map((origin) => origin.trim()).filter(Boolean) : [])
-].filter(Boolean)
+    normalizeOrigin(process.env.FRONTEND_URL),
+    normalizeOrigin(vercelUrl),
+    ...(process.env.FRONTEND_ORIGINS
+        ? process.env.FRONTEND_ORIGINS.split(',').map((origin) => normalizeOrigin(origin))
+        : [])
+].filter(Boolean))
 
 app.use(cors({
     origin: (origin, callback) => {
         if (!origin) return callback(null, true)
-        if (allowedOrigins.includes(origin)) return callback(null, true)
-        return callback(new Error('Not allowed by CORS'))
+
+        const normalized = normalizeOrigin(origin)
+        const isKnown = allowedOrigins.has(normalized)
+        const isVercelPreview = isVercelOrigin(normalized)
+
+        // Do not throw errors for unknown origins (which surface as 500 in Express).
+        if (isKnown || isVercelPreview) return callback(null, true)
+        return callback(null, false)
     },
     credentials: true
 }))
