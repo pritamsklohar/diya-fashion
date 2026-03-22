@@ -1,5 +1,6 @@
 import { Cart } from "../models/cartModel.js";
 import { Product } from "../models/productModel.js";
+import mongoose from "mongoose";
 
 const normalizeCartItemPrices = async (cart) => {
     for (const item of cart.items) {
@@ -19,6 +20,9 @@ const normalizeCartItemPrices = async (cart) => {
 export const getCart = async (req, res) => {
     try {
         const userId = req.id;
+        if (!userId) {
+            return res.status(401).json({ success: false, message: "Unauthorized user" });
+        }
 
         const cart = await Cart.findOne({ userId }).populate("items.productId");
         
@@ -34,6 +38,7 @@ export const getCart = async (req, res) => {
 
         return res.status(200).json({ success: true, cart });
     } catch (error) {
+        console.error("Error in getCart:", error);
         return res.status(500).json({
             success: false,
             message: error.message
@@ -46,6 +51,18 @@ export const addToCart = async (req, res) => {
         const userId = req.id;
         const { productId, quantity = 1 } = req.body;
         const safeQuantity = Math.max(1, parseInt(quantity, 10) || 1);
+        if (!userId) {
+            return res.status(401).json({
+                success: false,
+                message: "Unauthorized user"
+            });
+        }
+        if (!productId || !mongoose.Types.ObjectId.isValid(productId)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid product id"
+            });
+        }
 
         // check if product exists
         const product = await Product.findById(productId);
@@ -66,7 +83,17 @@ export const addToCart = async (req, res) => {
                 items: [{ productId, quantity: safeQuantity, price: product.productPrice }],
                 totalPrice: product.productPrice * safeQuantity
             });
-        } else {
+            try {
+                await cart.save();
+            } catch (error) {
+                // Handle race condition where another request created the cart first.
+                if (error?.code !== 11000) throw error;
+                cart = await Cart.findOne({ userId });
+                if (!cart) throw error;
+            }
+        }
+
+        if (cart) {
             // cleanup any orphaned items (product deleted)
             cart.items = cart.items.filter(item => item.productId);
             await normalizeCartItemPrices(cart);
@@ -103,6 +130,7 @@ export const addToCart = async (req, res) => {
         });
 
     } catch (error) {
+        console.error("Error in addToCart:", error);
         return res.status(500).json({
             success: false,
             message: error.message
@@ -114,6 +142,12 @@ export const updateQuantity = async (req, res) => {
     try {
         const userId = req.id;
         const { productId, type } = req.body;
+        if (!userId) {
+            return res.status(401).json({ success: false, message: "Unauthorized user" });
+        }
+        if (!productId || !mongoose.Types.ObjectId.isValid(productId)) {
+            return res.status(400).json({ success: false, message: "Invalid product id" });
+        }
 
         let cart = await Cart.findOne({ userId });
         if (!cart) return res.status(404).json({ success: false, message: "Cart not found" });
@@ -136,6 +170,7 @@ export const updateQuantity = async (req, res) => {
 
         return res.status(200).json({ success: true, cart });
     } catch (error) {
+        console.error("Error in updateQuantity:", error);
         return res.status(500).json({
             success: false,
             message: error.message
@@ -147,6 +182,12 @@ export const removeFromCart = async (req, res) => {
     try {
         const userId = req.id;
         const { productId } = req.body;
+        if (!userId) {
+            return res.status(401).json({ success: false, message: "Unauthorized user" });
+        }
+        if (!productId || !mongoose.Types.ObjectId.isValid(productId)) {
+            return res.status(400).json({ success: false, message: "Invalid product id" });
+        }
 
         let cart = await Cart.findOne({ userId });
         if (!cart) {
@@ -173,6 +214,7 @@ export const removeFromCart = async (req, res) => {
         });
 
     } catch (error) {
+        console.error("Error in removeFromCart:", error);
         return res.status(500).json({
             success: false,
             message: error.message
