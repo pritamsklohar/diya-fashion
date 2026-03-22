@@ -74,7 +74,7 @@ const HomeProducts = () => {
                       <ProductCard
                         key={product._id}
                         product={product}
-                        className='w-[220px] sm:w-[240px] shrink-0'
+                        className='w-[170px] sm:w-[220px] lg:w-[240px] shrink-0'
                       />
                     ))}
                   </div>

@@ -4,6 +4,7 @@ import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import Signup from './pages/Signup'
 import Login from './pages/Login'
+import ForgotPassword from './pages/ForgotPassword'
 import Verify from './pages/Verify'
 import VerifyEmail from './pages/VerifyEmail'
 import Footer from './components/Footer'
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
   {
     path:'/login',
     element: <><Login/></>
+  },
+  {
+    path:'/forgot-password',
+    element: <><ForgotPassword/></>
   },
   {
     path:'/verify/:token',

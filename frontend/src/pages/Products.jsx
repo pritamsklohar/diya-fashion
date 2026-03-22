@@ -9,6 +9,8 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import ProductCard from '@/components/ProductCard'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import axios from 'axios'
 import API_BASE_URL from '@/utils/apiBase'
 import { toast } from 'sonner'
@@ -24,6 +26,7 @@ const Products = () => {
   const [category, setCategory] = useState("All")
   const [sortOrder, setSortOrder] = useState('')
   const dispatch = useDispatch()
+  const categories = ["All", ...new Set(allProducts.map((p) => p?.category).filter(Boolean))]
 
   const getAllProducts = async () => {
     try {
@@ -70,7 +73,7 @@ const Products = () => {
   }, [search, category, sortOrder, priceRange, allProducts, dispatch])
 
   return (
-    <div className='bg-[#fff5f7] min-h-screen pt-10 pb-12'>
+    <div className='bg-[#fff5f7] min-h-screen pt-8 pb-12'>
       <div className='max-w-7xl mx-auto px-4'>
         <div className='flex flex-col md:flex-row gap-6'>
           <FilterSidebar
@@ -84,13 +87,83 @@ const Products = () => {
           />
 
           <div className='flex-1'>
+            <div className='md:hidden mb-4 space-y-3'>
+              <Input
+                type='text'
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder='Search fabrics'
+                className='bg-white rounded-lg'
+              />
+              <div className='flex items-center gap-2 overflow-x-auto pb-1'>
+                <Select value={category} onValueChange={setCategory}>
+                  <SelectTrigger className='w-[150px] rounded-full bg-white border-pink-200 shrink-0'>
+                    <SelectValue placeholder='Category' />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {categories.map((item) => (
+                        <SelectItem key={item} value={item}>{item}</SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+
+                <Select onValueChange={(value) => setSortOrder(value)}>
+                  <SelectTrigger className='w-[150px] rounded-full bg-white border-pink-200 shrink-0'>
+                    <SelectValue placeholder='Sort by price' />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value='lowToHigh'>Low to high</SelectItem>
+                      <SelectItem value='highToLow'>High to low</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+
+                <Select
+                  value={`${priceRange[0]}-${priceRange[1]}`}
+                  onValueChange={(value) => {
+                    const [min, max] = value.split('-').map(Number)
+                    setPriceRange([min, max])
+                  }}
+                >
+                  <SelectTrigger className='w-[150px] rounded-full bg-white border-pink-200 shrink-0'>
+                    <SelectValue placeholder='Price range' />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem value='0-10000'>All prices</SelectItem>
+                      <SelectItem value='0-500'>Under INR 500</SelectItem>
+                      <SelectItem value='500-1000'>INR 500 - 1000</SelectItem>
+                      <SelectItem value='1000-2000'>INR 1000 - 2000</SelectItem>
+                      <SelectItem value='2000-10000'>Above INR 2000</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+
+                <Button
+                  type='button'
+                  variant='outline'
+                  className='rounded-full border-pink-200 shrink-0'
+                  onClick={() => {
+                    setSearch("")
+                    setCategory("All")
+                    setPriceRange([0, 10000])
+                    setSortOrder('')
+                  }}
+                >
+                  Reset
+                </Button>
+              </div>
+            </div>
             <div className='flex flex-wrap items-center justify-between gap-4 mb-6 sticky top-24 bg-[#fff5f7] py-2 z-10'>
               <div>
                 <h1 className='text-xl font-semibold text-slate-900'>All Fabrics</h1>
                 <p className='text-sm text-slate-500'>Choose by category, price, and color.</p>
               </div>
               <Select onValueChange={(value) => setSortOrder(value)}>
-                <SelectTrigger className='w-full sm:w-[200px] bg-white rounded-lg'>
+                <SelectTrigger className='hidden md:flex w-full sm:w-[200px] bg-white rounded-lg'>
                   <SelectValue placeholder='Sort by price' />
                 </SelectTrigger>
                 <SelectContent>
@@ -101,7 +174,7 @@ const Products = () => {
                 </SelectContent>
               </Select>
             </div>
-            <div id='scroll' className='max-h-[calc(100vh-220px)] overflow-y-auto pr-2'>
+            <div id='scroll' className='max-h-[calc(100vh-150px)] overflow-y-auto pr-2'>
               {loading && (
                 <div className='text-sm text-slate-500 mb-4'>Loading products...</div>
               )}
@@ -111,7 +184,7 @@ const Products = () => {
                   <p className='text-sm text-slate-500 mt-2'>Try adjusting filters or search terms.</p>
                 </div>
               ) : (
-                <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5'>
+                <div className='grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5'>
                   {products.filter(Boolean).map((product) => (
                     <ProductCard key={product._id} product={product} />
                   ))}

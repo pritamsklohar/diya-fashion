@@ -41,7 +41,7 @@ const Navbar = () => {
       <div className='max-w-7xl mx-auto px-4'>
         <div className='flex items-center justify-between py-3'>
           <Link to='/' className='flex items-center gap-3'>
-            <img src='/Diya.png' alt='Diya Fashion' className='h-10 w-10 object-contain' />
+            <img src='/Diya.png' alt='Diya Fashion' className='rounded-full h-10 w-10 object-contain' />
             <div className='leading-tight'>
               <p className='text-lg font-semibold text-slate-900'>Diya Fashion</p>
               <p className='text-xs text-slate-500'>Women&apos;s Fabrics</p>

@@ -37,7 +37,7 @@ const AdminSales = () => {
 
     return (
         <div className=' bg-gray-100 py-10 mx-auto px-4'>
-            <div className='p-6 grid gap-6 lg:grid-cols-4'>
+            <div className='p-4 sm:p-6 grid gap-4 sm:gap-6 grid-cols-2 lg:grid-cols-4'>
                 
                 {/* Stats Cards */}
                 <Card className="bg-pink-500 text-white shadow">
@@ -77,7 +77,7 @@ const AdminSales = () => {
                 </Card>
 
                 {/* Sales Chart */}
-                <Card className="lg:col-span-4">
+                <Card className="col-span-2 lg:col-span-4">
                     <CardHeader>
                         <CardTitle>Sales (Last 30 Days)</CardTitle>
                     </CardHeader>

@@ -52,7 +52,7 @@ const Login = () => {
       }
     } catch (error) {
       console.log(error)
-      toast.error(error.response.data.message)
+      toast.error(error?.response?.data?.message || 'Server is not reachable. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -90,6 +90,11 @@ const Login = () => {
                 value={formData.password}
                 onChange={handleChange}
               />
+              <div className='text-right'>
+                <Link to='/forgot-password' className='text-xs text-pink-600 font-semibold hover:underline'>
+                  Forgot password?
+                </Link>
+              </div>
             </div>
           </div>
         </CardContent>

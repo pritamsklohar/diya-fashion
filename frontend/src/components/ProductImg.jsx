@@ -3,13 +3,17 @@ import Zoom from 'react-medium-image-zoom'
 import 'react-medium-image-zoom/dist/styles.css'
 
 const ProductImg = ({ images = [] }) => {
-  const [mainImg, setMainImg] = useState('')
+  const [mainImg, setMainImg] = useState(null)
 
   useEffect(() => {
     if (images.length > 0) {
-      setMainImg(images[0].url || '')
+      setMainImg(images[0].url || null)
+    } else {
+      setMainImg(null)
     }
   }, [images])
+
+  const displayImg = mainImg || images?.[0]?.url || null
 
   return (
     <div className='flex flex-col gap-4 lg:flex-row'>
@@ -29,13 +33,17 @@ const ProductImg = ({ images = [] }) => {
       </div>
 
       <div className='order-1 lg:order-2 flex-1'>
-        <Zoom>
-          <img
-            src={mainImg}
-            alt=''
-            className='w-full max-w-xl rounded-xl border border-pink-100 bg-white object-cover'
-          />
-        </Zoom>
+        {displayImg ? (
+          <Zoom>
+            <img
+              src={displayImg}
+              alt=''
+              className='w-full max-w-xl rounded-xl border border-pink-100 bg-white object-cover'
+            />
+          </Zoom>
+        ) : (
+          <div className='w-full max-w-xl aspect-square rounded-xl border border-pink-100 bg-pink-50' />
+        )}
       </div>
     </div>
   )

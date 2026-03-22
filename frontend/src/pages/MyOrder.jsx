@@ -8,6 +8,11 @@ import { Link, useNavigate } from 'react-router-dom'
 const MyOrder = () => {
   const navigate = useNavigate()
   const [userOrder, setUserOrder] = useState([])
+  const formatCurrency = (value) =>
+    Number(value || 0).toLocaleString('en-IN', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    })
 
   const getUserOrders = async () => {
     try {
@@ -56,9 +61,9 @@ const MyOrder = () => {
                   <p className='text-sm text-slate-500'>Order ID:</p>
                   <p className='font-semibold text-slate-800 break-all'>{order._id}</p>
                 </div>
-                <div className='text-right'>
+                <div className='min-w-[120px] text-left sm:text-right'>
                   <p className='text-sm text-slate-500'>Amount:</p>
-                  <p className='font-semibold text-slate-800'>INR {order.amount}</p>
+                  <p className='font-semibold text-slate-800'>INR {formatCurrency(order.amount)}</p>
                 </div>
               </div>
 
@@ -101,7 +106,7 @@ const MyOrder = () => {
                         <p className='text-xs text-slate-500'>Product ID: {product._id}</p>
                       </div>
                       <div className='text-sm font-semibold text-slate-700 whitespace-nowrap'>
-                        INR {product.productPrice} x {item.quantity}
+                        INR {formatCurrency(product.productPrice)} x {item.quantity}
                       </div>
                     </div>
                   )

@@ -10,7 +10,16 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-const FilterSidebar = ({ allProducts, priceRange, search, setSearch, category, setCategory, setPriceRange }) => {
+const FilterSidebar = ({
+  allProducts,
+  priceRange,
+  search,
+  setSearch,
+  category,
+  setCategory,
+  setPriceRange,
+  isMobile = false
+}) => {
   const Categories = allProducts.map(p => p.category)
   const UniqueCategory = ["All", ...new Set(Categories)]
 
@@ -35,8 +44,8 @@ const FilterSidebar = ({ allProducts, priceRange, search, setSearch, category, s
   }
 
   return (
-    <aside className='hidden md:block w-72'>
-      <div className='sticky top-24 space-y-5 rounded-xl border border-pink-100 bg-white p-5'>
+    <aside className={isMobile ? 'block w-full' : 'hidden md:block w-72'}>
+      <div className={`${isMobile ? 'space-y-5 rounded-xl border border-pink-100 bg-white p-5' : 'sticky top-24 space-y-5 rounded-xl border border-pink-100 bg-white p-5'}`}>
         <div className='space-y-2'>
           <p className='text-xs font-semibold text-slate-700'>Search</p>
           <Input
