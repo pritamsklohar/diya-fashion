@@ -7,9 +7,9 @@ const connectDB = async()=>{
         if (mongoose.connection.readyState === 1) return mongoose.connection
 
         if (!cachedPromise) {
-            const uri = process.env.MONGO_URI
+            const uri = process.env.MONGO_URI || process.env.MONGODB_URI
             if (!uri) {
-                throw new Error('MONGO_URI is missing')
+                throw new Error('Mongo URI is missing (set MONGO_URI or MONGODB_URI)')
             }
 
             // If URI already contains a db path, use it as-is; otherwise use default db name.
