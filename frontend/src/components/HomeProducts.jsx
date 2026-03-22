@@ -39,7 +39,6 @@ const HomeProducts = () => {
   return (
     <section className='py-12'>
       <div className='max-w-7xl mx-auto px-4'>
-        <div className='rounded-2xl border border-pink-100 bg-white/70 backdrop-blur-sm p-6 sm:p-8'>
           <div className='flex flex-wrap items-center justify-between gap-4 mb-6'>
             <div>
               <h2 className='text-xl font-semibold text-slate-900'>Shop by Category</h2>
@@ -82,7 +81,6 @@ const HomeProducts = () => {
               ))}
             </div>
           )}
-        </div>
       </div>
     </section>
   )
