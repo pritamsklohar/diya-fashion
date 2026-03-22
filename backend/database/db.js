@@ -1,12 +1,28 @@
 import mongoose from "mongoose"
 
+let cachedPromise = null
+
 const connectDB = async()=>{
     try {
-        await mongoose.connect(`${process.env.MONGO_URI}/diya-fashion`)
-        console.log('MongoDB connected successfully');
-        
+        if (mongoose.connection.readyState === 1) return mongoose.connection
+
+        if (!cachedPromise) {
+            const uri = process.env.MONGO_URI
+            if (!uri) {
+                throw new Error('MONGO_URI is missing')
+            }
+
+            // If URI already contains a db path, use it as-is; otherwise use default db name.
+            const hasDbPath = /^mongodb(?:\+srv)?:\/\/[^/]+\/[^?]+/.test(uri)
+            cachedPromise = mongoose.connect(uri, hasDbPath ? {} : { dbName: 'diya-fashion' })
+        }
+
+        await cachedPromise
+        return mongoose.connection
     } catch (error) {
-        console.log("MongoDB connection failed:", error);  
+        cachedPromise = null
+        console.log("MongoDB connection failed:", error);
+        throw error
     }
 }
 

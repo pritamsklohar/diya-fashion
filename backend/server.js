@@ -29,12 +29,22 @@ app.use(cors({
 //middleware
 app.use(express.json())
 
+app.use(async (_req, res, next) => {
+    try {
+        await connectDB()
+        next()
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Database connection failed'
+        })
+    }
+})
+
 app.use('/api/v1/user', userRoute)
 app.use('/api/v1/product', productRoute)
 app.use('/api/v1/cart', cartRoute)
 app.use('/api/v1/orders', orderRoute)
-
-connectDB()
 
 if (!process.env.VERCEL) {
     app.listen(PORT, () => {
