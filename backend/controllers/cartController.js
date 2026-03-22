@@ -1,6 +1,21 @@
 import { Cart } from "../models/cartModel.js";
 import { Product } from "../models/productModel.js";
 
+const normalizeCartItemPrices = async (cart) => {
+    for (const item of cart.items) {
+        if (typeof item.price === 'number' && Number.isFinite(item.price)) continue;
+        if (!item.productId) continue;
+
+        const pid = item.productId._id ? item.productId._id : item.productId;
+        const product = await Product.findById(pid).select('productPrice');
+        if (product && Number.isFinite(product.productPrice)) {
+            item.price = product.productPrice;
+        } else {
+            item.price = 0;
+        }
+    }
+};
+
 export const getCart = async (req, res) => {
     try {
         const userId = req.id;
@@ -10,6 +25,12 @@ export const getCart = async (req, res) => {
         if (!cart) {
             return res.json({ success: true, cart: [] });
         }
+
+        await normalizeCartItemPrices(cart);
+        cart.totalPrice = cart.items.reduce(
+            (acc, item) => acc + (Number(item.price) || 0) * (Number(item.quantity) || 0), 0
+        );
+        await cart.save();
 
         return res.status(200).json({ success: true, cart });
     } catch (error) {
@@ -48,6 +69,7 @@ export const addToCart = async (req, res) => {
         } else {
             // cleanup any orphaned items (product deleted)
             cart.items = cart.items.filter(item => item.productId);
+            await normalizeCartItemPrices(cart);
             // if cart exists, check if product is already in the cart
             const itemIndex = cart.items.findIndex(
                 (item) => item.productId && item.productId.toString() === productId
@@ -97,6 +119,7 @@ export const updateQuantity = async (req, res) => {
         if (!cart) return res.status(404).json({ success: false, message: "Cart not found" });
 
         cart.items = cart.items.filter(item => item.productId);
+        await normalizeCartItemPrices(cart);
         const item = cart.items.find(item => item.productId && item.productId.toString() === productId);
         if (!item) return res.status(404).json({ success: false, message: "Item not found" });
 
@@ -135,6 +158,7 @@ export const removeFromCart = async (req, res) => {
 
         // Filter out the item to be removed
         cart.items = cart.items.filter(item => item.productId && item.productId.toString() !== productId);
+        await normalizeCartItemPrices(cart);
 
         // Recalculate the total price after removal
         cart.totalPrice = cart.items.reduce((acc, item) => acc + item.price * item.quantity, 0);
