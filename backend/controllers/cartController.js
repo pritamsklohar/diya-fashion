@@ -23,7 +23,8 @@ export const getCart = async (req, res) => {
 export const addToCart = async (req, res) => {
     try {
         const userId = req.id;
-        const { productId } = req.body;
+        const { productId, quantity = 1 } = req.body;
+        const safeQuantity = Math.max(1, parseInt(quantity, 10) || 1);
 
         // check if product exists
         const product = await Product.findById(productId);
@@ -41,8 +42,8 @@ export const addToCart = async (req, res) => {
             // if cart doesn't exist, create a new one
             cart = new Cart({
                 userId,
-                items: [{ productId, quantity: 1, price: product.productPrice }],
-                totalPrice: product.productPrice
+                items: [{ productId, quantity: safeQuantity, price: product.productPrice }],
+                totalPrice: product.productPrice * safeQuantity
             });
         } else {
             // cleanup any orphaned items (product deleted)
@@ -54,12 +55,12 @@ export const addToCart = async (req, res) => {
 
             if (itemIndex > -1) {
                 // if product exists just increase quantity
-                cart.items[itemIndex].quantity += 1;
+                cart.items[itemIndex].quantity += safeQuantity;
             } else {
                 // if new product push to cart items array
                 cart.items.push({
                     productId,
-                    quantity: 1,
+                    quantity: safeQuantity,
                     price: product.productPrice
                 });
             }

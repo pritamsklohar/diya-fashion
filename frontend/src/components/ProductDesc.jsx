@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
 import axios from 'axios'
@@ -10,10 +10,11 @@ import { setCart } from '@/redux/productSlice'
 const ProductDesc = ({ product }) => {
   const accessToken = localStorage.getItem("accessToken")
   const dispatch = useDispatch()
+  const [quantity, setQuantity] = useState(1)
 
   const addToCart = async (productId) => {
     try {
-      const res = await axios.post(`${API_BASE_URL}/api/v1/cart/add`, { productId }, {
+      const res = await axios.post(`${API_BASE_URL}/api/v1/cart/add`, { productId, quantity }, {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
@@ -41,7 +42,16 @@ const ProductDesc = ({ product }) => {
       <div className='flex items-center gap-3'>
         <div className='flex items-center gap-2 rounded-md border border-pink-100 bg-white px-3 py-2'>
           <p className='text-sm font-medium text-slate-700'>Qty</p>
-          <Input type='number' className='w-16 h-9' defaultValue={1} />
+          <Input
+            type='number'
+            min={1}
+            className='w-16 h-9'
+            value={quantity}
+            onChange={(e) => {
+              const next = parseInt(e.target.value, 10)
+              setQuantity(Number.isFinite(next) && next > 0 ? next : 1)
+            }}
+          />
         </div>
         <Button
           onClick={() => addToCart(product?._id)}
